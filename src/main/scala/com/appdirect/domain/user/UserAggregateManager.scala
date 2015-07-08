@@ -37,8 +37,8 @@ class UserAggregateManager(storage: ActorRef) extends PersistentActor with Actor
   
   override val receiveCommand: Receive = {
     case Register(email) => {
-      val id = UUID.randomUUID().toString();
-      val token = UUID.randomUUID().toString();
+      val id = UUID.randomUUID().toString()
+      val token = UUID.randomUUID().toString()
       
       persist(Registered(id, email, token)) { event => 
         updateState(event)

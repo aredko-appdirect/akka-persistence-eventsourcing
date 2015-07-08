@@ -34,7 +34,10 @@ libraryDependencies ++= {
     "com.typesafe.akka" %%  "akka-slf4j" % akkaVersion,
     "com.typesafe.akka" %%  "akka-testkit" % akkaVersion % "test",
     "com.typesafe.akka" %%  "akka-persistence-experimental" % akkaVersion,
+    "com.github.scullxbones" %% "akka-persistence-mongo-rxmongo" % "0.4.0",
     "org.reactivemongo" %% "reactivemongo" % "0.11.1",
     "org.scalatest" %% "scalatest" % "2.2.1" % "test"
   )
 }
+
+EclipseKeys.createSrc := EclipseCreateSrc.Default + EclipseCreateSrc.Resource
