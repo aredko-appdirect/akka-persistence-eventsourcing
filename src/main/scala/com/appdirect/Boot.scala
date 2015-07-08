@@ -33,6 +33,8 @@ import com.appdirect.service.EmailServiceActor
 import scala.concurrent.duration._
 import akka.util.Timeout
 import com.appdirect.service.StorageActor
+import com.appdirect.domain.user.UserAggregateManager
+import com.appdirect.domain.user.Register
 
 object Boot extends App with DefaultJsonProtocol {
   implicit val system = ActorSystem()
@@ -45,6 +47,7 @@ object Boot extends App with DefaultJsonProtocol {
   
   val storageActor = system.actorOf(Props[StorageActor], "storage-actor")
   val emailServiceActor = system.actorOf(Props[EmailServiceActor], "email-actor")
+  val userAggregateManager = system.actorOf(Props(new UserAggregateManager(storageActor)), "user-aggregate-manager")
   system.eventStream.subscribe(emailServiceActor, classOf[Event])
   
   val routes = {
@@ -53,10 +56,7 @@ object Boot extends App with DefaultJsonProtocol {
         path("users" / "signup") {
            (post & formFields('email.as[String])) { email =>
               complete {
-                val id = UUID.randomUUID().toString();
-                
-                val actor = system.actorOf(Props(new UserAggregate(id, storageActor)), s"user-$id")
-                actor ? new UserSignUp(email, UUID.randomUUID().toString()) map { result =>
+                userAggregateManager ? Register(email) map { result =>
                   "Signup successful: " + email
                 }
               }                             

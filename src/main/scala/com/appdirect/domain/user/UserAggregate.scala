@@ -46,7 +46,7 @@ class UserAggregate(id: String, storage: ActorRef) extends PersistentActor with 
       }
   }  
   
-  val receiveRecover: Receive = {
+  override def receiveRecover: Receive = {
     case event: Event => updateState(event)
     case SnapshotOffer(_, snapshot: User) => state = snapshot
   }
