@@ -34,6 +34,7 @@ libraryDependencies ++= {
     "com.typesafe.akka" %%  "akka-slf4j" % akkaVersion,
     "com.typesafe.akka" %%  "akka-testkit" % akkaVersion % "test",
     "com.typesafe.akka" %%  "akka-persistence-experimental" % akkaVersion,
+    "org.reactivemongo" %% "reactivemongo" % "0.11.1",
     "org.scalatest" %% "scalatest" % "2.2.1" % "test"
   )
 }
