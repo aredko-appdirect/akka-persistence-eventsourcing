@@ -1,4 +1,4 @@
-name := "event souricng example"
+name := "Event Sourcing Demo"
 
 version := "0.0.1-SNAPSHOT"
 
@@ -19,25 +19,21 @@ parallelExecution in Test := false
 
 libraryDependencies ++= {
   val logbackVersion = "1.1.2"
-  val sprayVersion = "1.3.2"
+  val akkaStreamV = "1.0-RC4"
   val akkaVersion = "2.3.11"
   Seq(
-    "org.slf4j"               %   "slf4j-api"       % "1.7.7",
-    "ch.qos.logback"          %   "logback-core"    % logbackVersion,
-    "ch.qos.logback"          %   "logback-classic" % logbackVersion,
-    "io.spray"                %%  "spray-can"       % sprayVersion,
-    "io.spray"                %%  "spray-routing"   % sprayVersion,
-    "io.spray"                %%  "spray-testkit"   % sprayVersion,
-    "io.spray"                %%  "spray-httpx"     % sprayVersion,
-    "io.spray"                %%  "spray-client"    % sprayVersion,
-    "org.json4s"              %%  "json4s-native"   % "3.2.10",
-    "joda-time"               %   "joda-time"       % "2.4",
-    "org.joda"                %   "joda-convert"    % "1.7",
-    "com.typesafe.akka"       %%  "akka-actor"      % akkaVersion,
-    "com.typesafe.akka"       %%  "akka-slf4j"      % akkaVersion,
-    "com.typesafe.akka"       %%  "akka-testkit"    % akkaVersion % "test",
-    "com.typesafe.akka"       %%  "akka-persistence-experimental" % akkaVersion,
-    "org.scalatest"           %%  "scalatest"       % "2.2.1" % "test",
-    "io.spray"                %%  "spray-testkit"   % "1.3.1" % "test"
+    "org.slf4j" %   "slf4j-api"       % "1.7.7",
+    "ch.qos.logback" %   "logback-core"    % logbackVersion,
+    "ch.qos.logback" %   "logback-classic" % logbackVersion,
+    "com.typesafe.akka" %% "akka-stream-experimental" % akkaStreamV,
+    "com.typesafe.akka" %% "akka-http-core-experimental" % akkaStreamV,
+    "com.typesafe.akka" %% "akka-http-experimental" % akkaStreamV,
+    "com.typesafe.akka" %% "akka-http-spray-json-experimental" % akkaStreamV,
+    "com.typesafe.akka" %% "akka-http-testkit-experimental" % akkaStreamV,
+    "com.typesafe.akka" %%  "akka-actor" % akkaVersion,
+    "com.typesafe.akka" %%  "akka-slf4j" % akkaVersion,
+    "com.typesafe.akka" %%  "akka-testkit" % akkaVersion % "test",
+    "com.typesafe.akka" %%  "akka-persistence-experimental" % akkaVersion,
+    "org.scalatest" %% "scalatest" % "2.2.1" % "test"
   )
 }
