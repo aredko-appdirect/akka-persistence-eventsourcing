@@ -1,5 +1,6 @@
 package com.appdirect.service
 
+import akka.pattern.{pipe}
 import akka.actor.ActorLogging
 import akka.actor.Actor
 import com.appdirect.domain.user.UserAggregate.UserSignedUp
@@ -9,8 +10,7 @@ import com.appdirect.domain.user.UserAggregate.User
 import reactivemongo.bson.BSONDocument
 import reactivemongo.api.indexes.Index
 import reactivemongo.api.indexes.IndexType
-import scala.util.Failure
-import scala.util.Success
+import scala.util.Try
 
 case class Create(state: State[_])
 case class Update(state: State[_])
@@ -41,10 +41,7 @@ class StorageActor extends Actor with ActorLogging {
               "email" -> user.email,
               "token" -> user.token
           )
-      ) onComplete {
-        case Failure(ex) => log.error(s"Failed to insert", ex)
-        case Success(writeResult) => log.info(s"Successfully inserted document: $writeResult")
-      }
+      ) pipeTo sender
     }
   }
 }

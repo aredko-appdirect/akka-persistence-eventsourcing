@@ -35,6 +35,8 @@ import akka.util.Timeout
 import com.appdirect.service.StorageActor
 import com.appdirect.domain.user.UserAggregateManager
 import com.appdirect.domain.user.Register
+import com.appdirect.domain.user.Acknowledged
+import com.appdirect.domain.user.Error
 
 object Boot extends App with DefaultJsonProtocol {
   implicit val system = ActorSystem()
@@ -56,8 +58,9 @@ object Boot extends App with DefaultJsonProtocol {
         path("users" / "signup") {
            (post & formFields('email.as[String])) { email =>
               complete {
-                userAggregateManager ? Register(email) map { result =>
-                  "Signup successful: " + email
+                userAggregateManager ? Register(email) map { 
+                  case Acknowledged(_) => "Signup successful: " + email
+                  case Error(_) => "Email already exists: " + email
                 }
               }                             
           } 
