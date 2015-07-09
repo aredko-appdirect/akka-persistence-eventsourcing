@@ -28,27 +28,24 @@ object UserRoute extends CorsSupport {
 
   val userRoute = {
     logRequestResult("akka-eventsourced") {
-      pathPrefix("api" / "v1") {
-        corsHandler {
-          path("users" / "signup") {
-            (post & formFields('email.as[String])) { email =>
-              complete {
-                userAggregateManager ? Register(email) map {
-                  case Acknowledged(_) => "Signup successful: " + email
-                  case Error(_) => "Email already exists: " + email
-                }
+      pathPrefix("api" / "v1" / "users") {
+        path("signup") {
+          (post & formFields('email.as[String])) { email =>
+            complete {
+              userAggregateManager ? Register(email) map {
+                case Acknowledged(_) => "Signup successful: " + email
+                case Error(_) => "Email already exists: " + email
               }
             }
           }
-        }
-
-        //        path("users" / "activation" / Segment) { token =>
-        //           post {
-        //              complete {
-        //                val actor = system.actorSelection(, s"user-$id")
-        //              }
-        //          }
-        //        }
+        } ~
+          path(Segment) { token =>
+            get {
+              complete {
+                "Not Implemented"
+              }
+            }
+          }
       }
     }
   }
