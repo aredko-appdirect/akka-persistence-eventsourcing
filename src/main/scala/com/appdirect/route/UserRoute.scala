@@ -28,8 +28,8 @@ object UserRoute {
 
   val userRoute = {
     logRequestResult("akka-eventsourced") {
-      pathPrefix("api" / "v1") {
-        path("users" / "signup") {
+      pathPrefix("api" / "v1" / "users") {
+        path("signup") {
           (post & formFields('email.as[String])) { email =>
             complete {
               userAggregateManager ? Register(email) map {
@@ -38,15 +38,14 @@ object UserRoute {
               }
             }
           }
-        }
-
-        //        path("users" / "activation" / Segment) { token =>
-        //           post {
-        //              complete {
-        //                val actor = system.actorSelection(, s"user-$id")
-        //              }
-        //          }
-        //        }
+        } ~
+          path(Segment) { token =>
+            get {
+              complete {
+                "Not Implemented"
+              }
+            }
+          }
       }
     }
   }
