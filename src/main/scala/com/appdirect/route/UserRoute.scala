@@ -8,10 +8,10 @@ import akka.stream.ActorMaterializer
 import akka.util.Timeout
 import com.appdirect.domain.user.{Event, UserAggregateManager, _}
 import com.appdirect.service.{EmailServiceActor, StorageActor}
-
 import scala.concurrent.duration._
+import com.appdirect.CorsSupport
 
-object UserRoute {
+object UserRoute extends CorsSupport {
   implicit val system = ActorSystem()
   implicit val materializer = ActorMaterializer()
 
@@ -29,12 +29,14 @@ object UserRoute {
   val userRoute = {
     logRequestResult("akka-eventsourced") {
       pathPrefix("api" / "v1") {
-        path("users" / "signup") {
-          (post & formFields('email.as[String])) { email =>
-            complete {
-              userAggregateManager ? Register(email) map {
-                case Acknowledged(_) => "Signup successful: " + email
-                case Error(_) => "Email already exists: " + email
+        corsHandler {
+          path("users" / "signup") {
+            (post & formFields('email.as[String])) { email =>
+              complete {
+                userAggregateManager ? Register(email) map {
+                  case Acknowledged(_) => "Signup successful: " + email
+                  case Error(_) => "Email already exists: " + email
+                }
               }
             }
           }
