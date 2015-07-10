@@ -3,6 +3,7 @@ package com.appdirect.route
 import akka.actor.{ActorSystem, Props}
 import akka.event.Logging
 import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.model.StatusCodes._
 import akka.pattern.ask
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
@@ -10,6 +11,9 @@ import com.appdirect.domain.user.{Event, UserAggregateManager, _}
 import com.appdirect.service.{EmailServiceActor, StorageActor}
 import scala.concurrent.duration._
 import com.appdirect.CorsSupport
+import akka.http.scaladsl.model.HttpResponse
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
+import akka.http.scaladsl.model.ContentTypes._
 
 object UserRoute extends CorsSupport {
   implicit val system = ActorSystem()
@@ -34,8 +38,8 @@ object UserRoute extends CorsSupport {
             (post & formFields('email.as[String])) { email =>
               complete {
                 userAggregateManager ? Register(email) map {
-                  case Acknowledged(_) => "Signup successful: " + email
-                  case Error(_) => "Email already exists: " + email
+                  case Acknowledged(_) => HttpResponse(status = OK, entity = "Signup successful: " + email)
+                  case Error(_) => HttpResponse(status = Conflict, entity = "Email already exists: " + email)
                 }
               }
             }
